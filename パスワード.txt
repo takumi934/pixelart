@@ -1,0 +1,212 @@
+VWCltTnHece29xop
+
+
+app.get("./canvas.html", async (request, response) => {
+    try {
+        const pixelart = await client.pixelart.findMany();
+        response.json(pixelart);
+    } catch (err) {
+        response.status(500).json({ error: "Failed to fetch data" });
+    }
+});
+
+
+async function loadPixelArt() {
+                try {
+                    const res = await fetch("/api/pixelart");
+                    const data = await res.json();
+                    const art = data[0]; // 最初の1つだけ使う
+
+                    const matrix = JSON.parse(art.pixels); // 2次元配列に変換
+                    const flat = matrix.flat(); // フラットにする [0,1,0,...] 形式
+
+                    flat.forEach((val, idx) => {
+                        if (val) {
+                            pixels[idx].classList.add("pixel-active");
+                        }
+                    });
+                } catch (e) {
+                    console.error("データの読み込みに失敗しました", e);
+                }
+            }
+
+
+<script>
+            const board = document.getElementById('artBoard');
+            for (let i = 0; i < 64; i++) {
+            const btn = document.createElement('button');
+            btn.className = 'pixel';
+            btn.addEventListener('click', () => {
+                btn.classList.toggle('pixel-active');
+            });
+            board.appendChild(btn);
+            }
+
+        </script>
+
+
+
+
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8"/>
+        <title>ピクセルアート</title>
+        <style>
+            .pixel-art{
+                display: grid;
+                grid-template-columns: repeat(8,20px);
+                grid-gap: 2px;
+            }
+
+            .pixel{
+                width: 20px;
+                height: 20px;
+                border: none;
+                background-color: whitesmoke;
+                cursor:pointer;
+            }
+
+            .pixel-active{
+                background-color: black;
+            }
+
+            .selectColor{
+                width: 20px;
+                height: 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="artBoard" class="pixel-art"></div>
+        <div id="selectColor" class></div>
+
+        
+        <script>
+            const board = document.getElementById('artBoard');
+            for (let i = 0; i < 64; i++) {
+                const btn = document.createElement('button');
+                btn.className = 'pixel';
+                btn.addEventListener('click', () => {
+                    btn.classList.toggle('pixel-active');
+                });
+                board.appendChild(btn);
+            }
+
+            const select = document.getElementById("selectColor");
+            const colorlist = [black,blue,red,white];
+            for (i in colorlist){
+                const btn = document.createElement("button");
+                btn.className = "pixel";
+            }
+            
+        <script>
+            const button = document.getElementById("colorButton");
+            button.addEventListener("click", () => {
+            if (button.style.backgroundColor === "blue") {
+                button.style.backgroundColor = "white";
+                button.style.color = "black";
+            } else {
+                button.style.backgroundColor = "blue";
+                button.style.color = "white";
+            }
+        });
+</script>
+
+
+
+
+        </script>
+
+    </body>
+
+</html>
+
+
+
+仮
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>カラーピクセルアート</title>
+  <style>
+    body {
+      background-color: bisque;
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .palette {
+      margin-bottom: 10px;
+    }
+
+    .color-btn {
+      width: 30px;
+      height: 30px;
+      border: 2px solid #ccc;
+      cursor: pointer;
+      margin-right: 5px;
+    }
+
+    .pixel-art {
+      display: grid;
+      grid-template-columns: repeat(16, 20px);
+      grid-gap: 0px;
+    }
+
+    .pixel {
+      width: 20px;
+      height: 20px;
+      border: none;
+      background-color: whitesmoke;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>色を選んでピクセルアートを描こう</h2>
+  <div class="palette">
+    <button class="color-btn" style="background-color: black;" data-color="black"></button>
+    <button class="color-btn" style="background-color: red;" data-color="red"></button>
+    <button class="color-btn" style="background-color: blue;" data-color="blue"></button>
+    <button class="color-btn" style="background-color: green;" data-color="green"></button>
+    <button class="color-btn" style="background-color: white;" data-color="whitesmoke"></button>
+  </div>
+
+  <div id="artBoard" class="pixel-art"></div>
+  <button id="clearButton">すべて消す</button>
+
+
+  <script>
+    const board = document.getElementById('artBoard');
+    let currentColor = "black";
+
+    document.querySelectorAll('.color-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        currentColor = btn.getAttribute('data-color');
+      });
+    });
+
+
+    for (let i = 0; i < 256; i++) {
+      const pixel = document.createElement('button');
+      pixel.className = 'pixel';
+      pixel.addEventListener('click', () => {
+        pixel.style.backgroundColor = currentColor;
+      });
+      board.appendChild(pixel);
+    }
+    document.getElementById('clearButton').addEventListener('click', () => {
+        const pixels = document.querySelectorAll('.pixel');
+        pixels.forEach(pixel => {
+            pixel.style.backgroundColor = 'whitesmoke'; 
+        });
+    });
+  </script>
+</body>
+</html>
