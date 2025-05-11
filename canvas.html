@@ -80,6 +80,8 @@
 
   <div id="artBoard" class="pixel-art"></div>
   <button class ="clearButton" id="clearButton">すべて消す</button>
+  <button id="saveButton" class="clearButton">画像として保存</button>
+
 
 
   <script>
@@ -107,6 +109,34 @@
             pixel.style.backgroundColor = 'whitesmoke'; 
         });
     });
+
+    document.getElementById('saveButton').addEventListener('click', () => {
+      const cols = 32;
+      const rows = 32;
+      const scale = 100;
+
+      const canvas = document.createElement('canvas');
+      canvas.width = cols * scale;
+      canvas.height = rows * scale;
+      const ctx = canvas.getContext('2d');
+
+      const pixels = document.querySelectorAll('.pixel');
+
+      pixels.forEach((pixel, i) => {
+        const x = i % cols;
+        const y = Math.floor(i / cols);
+        const color = window.getComputedStyle(pixel).backgroundColor;
+        ctx.fillStyle = color;
+        ctx.fillRect(x * scale, y * scale, scale, scale);
+      });
+
+      const link = document.createElement('a');
+      link.download = 'pixel-art.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    });
+
+
   </script>
 </body>
 </html>
